@@ -3,7 +3,7 @@
 # include <cstddef>
 #include "iostream"
 
-// List.hpp
+//List.hpp
 template <typename T>
 struct List;
 
@@ -85,7 +85,7 @@ struct ListIterator{
     }
 
     private:
-        // The Node the iterator is pointing to
+        //The Node the iterator is pointing to
         ListNode <T>* m_node = nullptr;
 };
 
@@ -100,6 +100,8 @@ struct ListConstIterator{
     private:
         ListNode <T>* m_node = nullptr;
 };
+
+//Aufg. 4.7
 
 template <typename T>
 bool operator ==(List <T> const & xs , List <T> const & ys){
@@ -190,11 +192,11 @@ class List{
         
 
 
-        // http :// en. cppreference .com /w/cpp / container / list / empty
+        //http://en.cppreference.com/w/cpp/container/list/empty
         bool empty() const{
             return m_size == 0;
         }
-        // http :// en. cppreference .com /w/cpp / container / list / size
+        //http://en.cppreference.com/w/cpp/container/list/size
         std::size_t size() const{
             return m_size;
         }
@@ -227,9 +229,13 @@ class List{
             }
         }
 
-        /*void insert(const Self& x, T const& v){
+        //Aufg. 4.9
 
-        }*/
+        void insert(const Self& x, T const& v){         //not done
+
+        }
+
+        //Aufg. 4.3
 
         void pop_front(){
             if(empty()){
@@ -290,6 +296,8 @@ class List{
             }
         }  
 
+        //Aufg. 4.6
+
         ListIterator <T> begin() const{
             if(empty()){
                 return ListIterator<T>();
@@ -307,8 +315,10 @@ class List{
                 return ListIterator<T>(m_last);
             }
         } 
-    
-        void reverse(){
+        
+        //Aufg. 4.10
+
+        void reverse(){                 //not done
             auto a = m_first;
             m_first = m_last;
             m_last = a;
