@@ -64,16 +64,13 @@ TEST_CASE (" should be empty after clearing ", "[ modifiers ]")
   list.push_front(2);
   list.push_front(3);
   list.push_front(4);
-  //std::cout << "The front is:" << list.front();
   list.clear();
-  //std::cout << "The size is: " << list.size();
-  //std::cout << "The front is:" << list.front();
   REQUIRE(list.empty());
 }
 
 TEST_CASE (" should be an empty range after default construction ","[iterators]")
 {
-  List <int> list ;
+  List <int> list;
   auto b = list.begin();
   auto e = list.end();
   REQUIRE (b == e);
@@ -81,7 +78,7 @@ TEST_CASE (" should be an empty range after default construction ","[iterators]"
 
 TEST_CASE (" provide acces to the first element with begin ", "[iterators]")
 {
-  List <int> list ;
+  List <int> list;
   list.push_front (42);
   REQUIRE (42 == *list.begin());
 }
@@ -132,10 +129,10 @@ TEST_CASE ("operators ", "[iterators]")
   REQUIRE (*(++b) == 5);          // 6>5 9 8  wird erhöht und neuer Knoten wird ausgegeben
   REQUIRE (*(b++) == 5);          // 6 5>9 8  wird erhöht und alter Wert wird ausgegeben
   REQUIRE (*(++b) == 8);          // 6 5 9>8  wird erhöht und neuer Knoten wird ausgegeben
-  //REQUIRE (*(++b) == nullptr);  // 6 5 9 8> vrgl. mit nullptr geht nicht obwohl es drauf zeigt
+  REQUIRE ((++b) == nullptr);  // 6 5 9 8> vrgl. mit nullptr geht nicht obwohl es drauf zeigt
   REQUIRE (*e == 8);              // 6 5 9 8<
   REQUIRE (*(e++) == 8);          // 6 5 9 8  < wird erhöht und alter Wert wird ausgegeben 
-  //REQUIRE (*e == nullptr);      // 6 5 9 8  < vrgl. mit nullptr geht nicht obwohl es drauf zeigt
+  REQUIRE (e == nullptr);      // 6 5 9 8  < vrgl. mit nullptr geht nicht obwohl es drauf zeigt
 }
 
 TEST_CASE (" copy constructor ", "[ constructor ]")
@@ -149,28 +146,27 @@ TEST_CASE (" copy constructor ", "[ constructor ]")
   REQUIRE(list == list2);
   List <int> list3;
   List <int> list4;
-  //REQUIRE(list != list3);         //list mit Elementen, list3 ohne
-  //REQUIRE(list3 == list4);        //list3 ohne Elemente, list4 auch 
+  REQUIRE(list != list3);         //list mit Elementen, list3 ohne
+  REQUIRE(list3 == list4);        //list3 ohne Elemente, list4 auch 
   list3.push_front(8);
   REQUIRE(list != list3);
 }
 
-/*TEST_CASE (" move constructor ", "[ constructor ]")
+TEST_CASE (" move constructor ", "[ constructor ]")
 {
   List <int> list;
-  list.push_front (1);
-  list.push_front (2);
-  list.push_front (3);
-  list.push_front (4);
+  list.push_front(1);
+  list.push_front(2);
+  list.push_front(3);
+  list.push_front(4);
   List <int> list2 (std::move(list));
   REQUIRE(0 == list.size());
   REQUIRE(list.empty());
   REQUIRE(4 == list2.size());
-}*/
+}
 
-/*TEST_CASE ("reverse ", "[reverse]")
+TEST_CASE ("reverse ", "[reverse]")
 {
-
   List <int> list;
   list.push_front(8);
   list.push_front(9);
@@ -183,14 +179,36 @@ TEST_CASE (" copy constructor ", "[ constructor ]")
   REQUIRE (*(++b) == 9);
   REQUIRE (*(++b) == 8);
 
+  //std::cout<< "The front: " << list.front() << "\n";
+  //std::cout<< "The back: " << list.back() << "\n";
+
   list.reverse();
   auto e = list.begin();
 
+  //std::cout<< "The front2: " << list.front() << "\n";
+  //std::cout<< "The back2: " << list.back() << "\n";
+
   REQUIRE (*e == 8);  
   REQUIRE (*(++e) == 9);
-  //REQUIRE (*(++e) == 5);
-  //REQUIRE (*(++e) == 6);
-}*/
+  REQUIRE (*(++e) == 5);
+  REQUIRE (*(++e) == 6);
+}
+
+TEST_CASE ("free reverse ", "[reverse]")
+{
+  List <int> list;
+  list.push_front(8);              //6598
+  list.push_front(9);
+  list.push_front(5);
+  list.push_front(6);
+
+  auto r = reverse(list);
+
+  REQUIRE (*r.begin() == 8);      //8956
+  REQUIRE (*r.begin().next() == 9);
+  REQUIRE (*r.begin().next().next() == 5);
+  REQUIRE (*r.end() == 6);
+}
 
 int main(int argc, char* argv[]){
 

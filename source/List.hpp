@@ -107,14 +107,17 @@ template <typename T>
 bool operator ==(List <T> const & xs , List <T> const & ys){
     auto a = xs.begin();
     auto b = ys.begin();
-    bool c = false;
-    if(xs.size() == ys.size()){
+    bool c = true;
+    if(xs.size() != ys.size()){
+        c = false;
+    }
+    else{
         while(a != nullptr){
-            if(*a == *b){
-                c = true;
+            if(*a != *b){
+                c = false;
             }
-            a++;
-            b++;
+            ++a;
+            ++b;
         }
     }
     return c;
@@ -125,22 +128,16 @@ bool operator !=(List <T> const & xs , List <T> const & ys){
     auto a = xs.begin();
     auto b = ys.begin();
     bool c = false;
-    if(xs.size() < ys.size()){
+    if(xs.size() != ys.size()){
+        c = true;
+    }
+    else{
         while(a != nullptr){
             if(*a != *b){
                 c = true;
             }
-            a++;
-            b++;
-        }
-    }
-    if(xs.size() > ys.size()){
-        while(b != nullptr){
-            if(*a != *b){
-                c = true;
-            }
-            a++;
-            b++;
+            ++a;
+            ++b;
         }
     }
     return c;
@@ -169,6 +166,12 @@ class List{
             m_first (nullptr),
             m_last (nullptr) {}
 
+        //Dstructor
+
+        ~List(){
+            clear();
+        }
+
         //Copy Constructor
 
         List(List<T> const& list):                //schon implementierte Liste
@@ -183,11 +186,13 @@ class List{
 
         //Move Constructor
 
-        List(List<T>&& list):
-            m_first(list.m_first),
-            m_last(list.m_last) {
-                list.m_first = nullptr;
-                list.m_last = nullptr;
+        List(List<T>&& list2):
+            m_size(list2.m_size),
+            m_first(list2.m_first),
+            m_last(list2.m_last) {
+                list2.m_first = nullptr;
+                list2.m_last = nullptr;
+                list2.m_size = 0;
             }
         
 
@@ -231,9 +236,17 @@ class List{
 
         //Aufg. 4.9
 
-        void insert(const Self& x, T const& v){         //not done
+        /*void insert(const iterator& x, T const& v){         //not done
+            if(x == begin()){
+                push_front(v);
+            }
+            else if(x == end()){
+                push_back(v);
+            }
+            else{
 
-        }
+            }
+        }*/
 
         //Aufg. 4.3
 
@@ -275,7 +288,7 @@ class List{
                 return 0;
             }
             ListNode <T> front = *m_first;
-            return front.m_value;
+            return front.m_value;                         //m_first->m_value     
         }
 
         T back(){
@@ -284,7 +297,7 @@ class List{
                 return 0;
             }
             ListNode <T> back = *m_last;
-            return back.m_value;
+            return back.m_value;                        //m_last->m_value 
         } 
 
         void clear(){
@@ -318,15 +331,37 @@ class List{
         
         //Aufg. 4.10
 
-        void reverse(){                 //not done
-            auto a = m_first;
-            m_first = m_last;
-            m_last = a;
+        void reverse(){                
+            int s = m_size;
+            auto a = begin();
+            while(a != nullptr){
+                push_front(*a);
+                ++a;
+            }
+            for(int i = 1; i <= s; ++i){
+                pop_back();
+            }
         }
+
+
+        
+
 
     private:
         std::size_t m_size = 0;
         ListNode <T>* m_first = nullptr;
         ListNode <T>* m_last = nullptr;
 };
+
+template <typename T> 
+List<T> reverse(List<T> const& list){
+    List<T> list2;
+    auto a = list.begin();
+    while(a != nullptr){
+        list2.push_front(*a);
+        ++a;
+    }
+    return list2;
+}
+
 #endif //#define BUW_LIST_HPP
